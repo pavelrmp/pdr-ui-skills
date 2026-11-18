@@ -8,5 +8,5 @@ Claude skills for building PDR.cloud user interfaces.
 
 ## Install
 
-- **Claude Code:** copy a skill folder into `.claude/skills/` of your project (or `~/.claude/skills/`).
-- **Claude.ai:** zip a skill folder and upload it under Settings → Capabilities → Skills.
+- **Claude Code:** copy a skill folder (e.g. `pdr-design-system/`) to `.claude/skills/` in your project, or to `~/.claude/skills/` for all projects.
+- **Claude (claude.ai / desktop):** zip the skill folder so it is the top-level folder of the zip, then upload it under Settings → Capabilities → Skills.

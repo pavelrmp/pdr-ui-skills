@@ -12,9 +12,15 @@ Claude skill + design tokens that map the [PDR.cloud Figma Design System](https:
 | `references/foundations/` | Accessibility, grids & breakpoints, icons |
 | `references/examples/` | Page examples from the Figma "Examples" page |
 
-## Use
+## Install
 
-- **Claude Code:** copy this folder to `.claude/skills/pdr-design-system/` in the Angular repo (or `~/.claude/skills/`).
-- **Claude.ai:** zip the folder and upload it under Settings → Capabilities → Skills.
+**Claude Code**
+- Project (recommended, shared with the team via git): put this folder at `.claude/skills/pdr-design-system/` in the root of the Angular repo.
+- Personal (all your projects): `~/.claude/skills/pdr-design-system/`.
+- The folder name must stay `pdr-design-system` (same as `name` in `SKILL.md`). Claude loads it automatically for UI work, or run `/pdr-design-system`.
+- Connect the Figma MCP server so Claude can open Figma frames and icons by node ID.
+
+**Claude (claude.ai / desktop)**
+- Upload `pdr-design-system.zip` (this folder at the top level of the zip) under Settings → Capabilities → Skills.
 
 Tokens were extracted via Figma MCP on 2026-11-18. Re-extract when Figma variables change.
