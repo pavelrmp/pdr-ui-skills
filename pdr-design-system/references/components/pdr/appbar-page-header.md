@@ -24,7 +24,11 @@ Layer: **PDR** — no Material equivalent; compose Material primitives + tokens.
   :host { display: block; background: var(--mat-sys-surface); box-shadow: var(--mat-sys-level1); position: relative; z-index: 2; }
   ```
   `--mat-sys-level1` switches between the light and dark shadow automatically (see `../../theming-rules.md`).
-- **Logo is an SVG**: 44 × 44, layer **Logo** inside the App bar (the same in Desktop, Tablet and Mobile). Export it from Figma as SVG (select the Logo layer → Export → SVG) into `src/assets/brand/pdr-logo.svg`. All three sizes use the same file. Embed it as SVG (`<img src="assets/brand/pdr-logo.svg" alt="PDR.cloud" width="44" height="44">` or an inline SVG component). Never PNG/JPG, never rebuilt with CSS, text or icon fonts.
+- **Logo is an SVG and ships with this skill: `assets/brand/pdr-logo.svg`** (44 × 44, exported from the Logo layer of the App bar in Figma; identical in Desktop, Tablet and Mobile). Always use this file — never a placeholder, never ask the user to export it, never PNG/JPG, never rebuilt with CSS, text or icon fonts.
+  - Angular: copy it to `src/assets/brand/pdr-logo.svg` and embed it: `<img src="assets/brand/pdr-logo.svg" alt="PDR.cloud" width="44" height="44">` (or inline the SVG markup).
+  - Designs / mockups / HTML prototypes: inline the SVG markup from the file directly.
+  - Its colors (`#1D75E8` background, white mark) are part of the brand asset and are the only allowed hard-coded colors.
+  - If the logo changes in Figma, re-export the Logo layer (select it → Export → SVG) and replace the file in the skill.
 
 ### Page header `10125:1535`
 Only **two things change per page**:

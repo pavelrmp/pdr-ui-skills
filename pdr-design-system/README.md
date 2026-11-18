@@ -11,6 +11,7 @@ Claude skill + design tokens that map the [PDR.cloud Figma Design System](https:
 | `references/components/pdr/` | One file per Figma page under "↓ PDR COMPONENTS" |
 | `references/foundations/` | Accessibility, grids & breakpoints, icons |
 | `references/examples/` | Page examples from the Figma "Examples" page |
+| `assets/brand/pdr-logo.svg` | PDR logo (App bar, 44 × 44) exported from Figma |
 
 ## Install
 

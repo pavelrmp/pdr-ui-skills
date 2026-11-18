@@ -20,6 +20,7 @@ Component docs mirror the Figma file: one file per Figma page, split into the tw
 | Figma page under **↓ PDR COMPONENTS** | `references/components/pdr/<page>.md` |
 | Page layout, breakpoints, column grid, responsive behavior | `references/foundations/grids-breakpoints.md` |
 | Accessibility requirements, contrast, keyboard, ARIA, testing (definition of done) | `references/foundations/accessibility.md` |
+| PDR logo (App bar) | `assets/brand/pdr-logo.svg` — bundled, use directly |
 | Any icon (Material Symbols or custom PDR domain icons) | `references/foundations/icons.md` (PDR icons: Figma link + node IDs) |
 | Building a whole new page / screen / modal / sheet | `references/examples/README.md` → the matching example |
 
@@ -40,7 +41,7 @@ Every component file lists the Figma node IDs, variant props → Angular mapping
 9. **States are never hand-coded.** Figma Hovered/Focused/Pressed/Dragged = Material state layers.
 10. **Unfinished pages:** 🔴 Accordion, Autocomplete; 🌕 Chips, Sheets, Status tags, Calendars, Chats, Files, Order preview, Payment, Popovers. Use Material defaults and flag deviations in the PR.
 11. **Accessibility is a merge requirement:** WCAG 2.1 AA, keyboard-operable, labelled, ≥ 44 px targets — checklist in `references/foundations/accessibility.md`. Never put text on `secondary` or `warning` (light mode fails contrast); use their `-container` roles.
-12. **Locked components — App bar and Page header.** Never change their design. App bar: used as-is, logo always SVG. Page header: only the title and the right-side page actions change; breadcrumbs appear automatically from navigation level 3. Details: `references/components/pdr/appbar-page-header.md`.
+12. **Locked components — App bar and Page header.** Never change their design. App bar: used as-is, logo always the bundled SVG `assets/brand/pdr-logo.svg` (never a placeholder). Page header: only the title and the right-side page actions change; breadcrumbs appear automatically from navigation level 3. Details: `references/components/pdr/appbar-page-header.md`.
 13. Ignore any Figma set prefixed `Deprecated/`, `Example/`, `.` or `_`.
 
 ## Figma → Angular mapping (index)
