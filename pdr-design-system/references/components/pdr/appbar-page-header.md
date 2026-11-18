@@ -18,7 +18,13 @@ Layer: **PDR** — no Material equivalent; compose Material primitives + tokens.
 ### App bar `9329:6038`
 - Use the one shared `<pdr-app-bar />` on every page, exactly as designed. It has **no styling inputs**.
 - Allowed configuration only: `Size` (Desktop / Tablet / Mobile — chosen automatically by breakpoint) and `Show beta` (`[beta]="true"`).
-- **Logo is an SVG**: 44 × 44 (instance in the app bar: `9768:5050`). Export it from Figma as SVG (select the logo → Export → SVG, or Figma MCP export of node `9768:5050`) into `src/assets/brand/pdr-logo.svg`. Embed it as SVG (`<img src="assets/brand/pdr-logo.svg" alt="PDR.cloud" width="44" height="44">` or an inline SVG component). Never PNG/JPG, never rebuilt with CSS, text or icon fonts.
+- **Elevation is part of the design**: the app bar always has elevation **level 1** (Figma effect style `M3/Elevation Light/1`, `Dark/1` in dark mode). The shadow cannot be removed, reduced or changed — not on scroll, not per page.
+  ```scss
+  // inside pdr-app-bar only
+  :host { display: block; background: var(--mat-sys-surface); box-shadow: var(--mat-sys-level1); position: relative; z-index: 2; }
+  ```
+  `--mat-sys-level1` switches between the light and dark shadow automatically (see `../../theming-rules.md`).
+- **Logo is an SVG**: 44 × 44, layer **Logo** inside the App bar (Desktop `10978:32647`, Tablet `10978:32663`, Mobile `10978:32679` — identical). Export it from Figma as SVG (select the Logo layer → Export → SVG, or Figma MCP export of node `10978:32647`) into `src/assets/brand/pdr-logo.svg`. All three sizes use the same file. Embed it as SVG (`<img src="assets/brand/pdr-logo.svg" alt="PDR.cloud" width="44" height="44">` or an inline SVG component). Never PNG/JPG, never rebuilt with CSS, text or icon fonts.
 
 ### Page header `10125:1535`
 Only **two things change per page**:
