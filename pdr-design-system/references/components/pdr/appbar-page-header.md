@@ -18,7 +18,7 @@ Layer: **PDR** — no Material equivalent; compose Material primitives + tokens.
 ### App bar `9329:6038`
 - Use the one shared `<pdr-app-bar />` on every page, exactly as designed. It has **no styling inputs**.
 - Allowed configuration only: `Size` (Desktop / Tablet / Mobile — chosen automatically by breakpoint) and `Show beta` (`[beta]="true"`).
-- **Logo is an SVG**: library component **Logo**, `Property 1=Blue BG`, 44 × 44 (instance in the app bar: `9768:5050`). Export it from Figma as SVG (select the logo → Export → SVG, or Figma MCP export of node `9768:5050`) into `src/assets/brand/pdr-logo.svg`. Embed it as SVG (`<img src="assets/brand/pdr-logo.svg" alt="PDR.cloud" width="44" height="44">` or an inline SVG component). Never PNG/JPG, never rebuilt with CSS, text or icon fonts.
+- **Logo is an SVG**: 44 × 44 (instance in the app bar: `9768:5050`). Export it from Figma as SVG (select the logo → Export → SVG, or Figma MCP export of node `9768:5050`) into `src/assets/brand/pdr-logo.svg`. Embed it as SVG (`<img src="assets/brand/pdr-logo.svg" alt="PDR.cloud" width="44" height="44">` or an inline SVG component). Never PNG/JPG, never rebuilt with CSS, text or icon fonts.
 
 ### Page header `10125:1535`
 Only **two things change per page**:
@@ -26,6 +26,27 @@ Only **two things change per page**:
 2. the **page-level actions** on the right side (projected into `pdrPageHeaderActions`)
 
 Everything else (layout, height, typography, spacing, breadcrumb position) is fixed. No subtitle, no extra content, no custom styles.
+
+**Page title typography** (same as MD3):
+| Size | Text style | Token |
+|---|---|---|
+| Desktop and Tablet | display small (Roboto 36/44) | `font: var(--mat-sys-display-small)` |
+| Mobile | headline medium (Roboto 28/36) | `font: var(--mat-sys-headline-medium)` |
+
+```scss
+// inside pdr-page-header only — pages never style the title
+.pdr-page-header__title {
+  margin: 0;
+  font: var(--mat-sys-headline-medium);
+  letter-spacing: var(--mat-sys-headline-medium-tracking);
+  color: var(--mat-sys-on-surface);
+  @include pdr-up(m) {
+    font: var(--mat-sys-display-small);
+    letter-spacing: var(--mat-sys-display-small-tracking);
+  }
+}
+```
+The switch happens at the M breakpoint (768 px), where the Figma variant changes from Mobile to Desktop and Tablet.
 
 **Breadcrumbs are hidden by default.** They appear only when the page is on the **3rd navigation level or deeper** (e.g. Aufträge › Auftrag A-0001 › Kalkulation). Level 1 and 2 pages never show them. Pages don't decide this themselves: `pdr-page-header` derives the trail from the router.
 
@@ -62,7 +83,7 @@ showBreadcrumbs = computed(() => this.trail().length >= 3);
 | Size=Desktop/Tablet/Mobile | responsive inside `pdr-app-bar` via `BreakpointObserver` (M 768 / L 992) | — |
 | Top app bar Small / Small centered / Medium / Large | `<pdr-top-app-bar size="small|center|medium|large">` | `mat-toolbar`; title: title-large (small) / headline-small (medium) / headline-medium (large) |
 | Elevation=on-scroll | `[elevateOnScroll]="true"` → surface-container + level2 when scrolled (`CdkScrollable`) | — |
-| Page header 🔒 | `<pdr-page-header [title]>` with `pdrPageHeaderActions` slot — nothing else is configurable | `headline-small`, `matButton`s |
+| Page header 🔒 | `<pdr-page-header [title]>` with `pdrPageHeaderActions` slot — nothing else is configurable | title: `display-small` (desktop/tablet) / `headline-medium` (mobile), `matButton`s |
 | Breadcrumbs | rendered **only by `pdr-page-header`**, from level 3; never placed on a page directly | `<nav aria-label="Brotkrümel"><ol>` + `routerLink`, last item `aria-current="page"` |
 | Section title | `<pdr-section-title>` | title-medium + optional action `matButton` |
 | Header actions | `pdrPageHeaderActions` content | `matButton`, `matIconButton`, `mat-menu` |
