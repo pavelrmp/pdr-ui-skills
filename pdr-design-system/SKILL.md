@@ -40,7 +40,8 @@ Every component file lists the Figma node IDs, variant props → Angular mapping
 9. **States are never hand-coded.** Figma Hovered/Focused/Pressed/Dragged = Material state layers.
 10. **Unfinished pages:** 🔴 Accordion, Autocomplete; 🌕 Chips, Sheets, Status tags, Calendars, Chats, Files, Order preview, Payment, Popovers. Use Material defaults and flag deviations in the PR.
 11. **Accessibility is a merge requirement:** WCAG 2.1 AA, keyboard-operable, labelled, ≥ 44 px targets — checklist in `references/foundations/accessibility.md`. Never put text on `secondary` or `warning` (light mode fails contrast); use their `-container` roles.
-12. Ignore any Figma set prefixed `Deprecated/`, `Example/`, `.` or `_`.
+12. **Locked components — App bar and Page header.** Never change their design. App bar: used as-is, logo always SVG. Page header: only the title and the right-side page actions change; breadcrumbs appear automatically from navigation level 3. Details: `references/components/pdr/appbar-page-header.md`.
+13. Ignore any Figma set prefixed `Deprecated/`, `Example/`, `.` or `_`.
 
 ## Figma → Angular mapping (index)
 
@@ -80,7 +81,7 @@ Every component file lists the Figma node IDs, variant props → Angular mapping
 | Figma page | File | Wrappers |
 |---|---|---|
 | Alerts | `alerts.md` | `pdr-alert` |
-| Appbar & Page header | `appbar-page-header.md` | `pdr-app-bar`, `pdr-top-app-bar`, `pdr-page-header`, `pdr-breadcrumbs` |
+| Appbar & Page header 🔒 | `appbar-page-header.md` | `pdr-app-bar`, `pdr-page-header` (locked), `pdr-top-app-bar` |
 | Avatars | `avatars.md` | `pdr-avatar`, `pdr-avatar-group`, `pdr-selected-user` |
 | Brand loader | `brand-loader.md` | `pdr-brand-loader` |
 | Calendars 🌕 | `calendars.md` | `pdr-calendar-header`, `pdr-gantt-bar` |
