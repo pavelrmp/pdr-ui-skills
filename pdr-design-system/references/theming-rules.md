@@ -1,5 +1,7 @@
 # Theming rules — Angular Material M3
 
+Token values and usage per category: `tokens/` (colors, typography, spacing, shape, elevation, state layers, motion).
+
 Load order in `styles.scss`: `_pdr-theme.scss` → `_pdr-overrides.scss` → app styles.
 
 ## 1. Principles
@@ -180,10 +182,12 @@ styles/
 @use 'components/md3/data-grids';
 @use 'components/md3/dialogs';
 @use 'components/md3/divider';
-@use 'components/md3/menus-select';
-@use 'components/md3/navigation-drawer-rail';
+@use 'components/md3/menu';
+@use 'components/md3/input';
+@use 'components/md3/bottom-sheet';
+@use 'components/pdr/navigation-menu';
 @use 'components/md3/sheets';
-@use 'components/md3/text-fields';
+@use 'components/md3/form-fields';
 @use 'components/md3/toolbar';
 @use 'components/md3/tooltips';
 @use 'components/md3/tree';
@@ -198,7 +202,7 @@ Global divergences from M3 defaults (the only ones):
 | Button padding | 16px horizontal (M3: 24px) | `md3/buttons.md` |
 | FAB "Primary" | primary (M3 FAB default: primary-container) | `md3/buttons.md` |
 | Dialog | surface-container-lowest + level5 (M3: surface-container-high, no shadow) | `md3/dialogs.md` |
-| Nav drawer item | 56px, corner-full | `md3/navigation-drawer-rail.md` |
+| Nav drawer item | 56px, corner-full | `pdr/navigation-menu.md` |
 | Toolbar | 88px, surface-container-lowest, corner-large | `md3/toolbar.md` |
 
 Pages with "None — Figma matches M3 defaults" must stay override-free.
@@ -216,6 +220,6 @@ Breakpoint mixins (`pdr-up()`) and `PDR_BREAKPOINTS` are defined in `foundations
 ## 6. Known Figma data caveats
 
 - Dark-mode state-layer variables alias a deleted variable, so Material's default state-layer opacities (.08 / .12 / .12 / .16) are used.
-- `surface-bright`, `surface-tint` and `scrim` are not in Figma; they are derived (`pdr.derived` in tokens.json).
+- `surface-bright` and `surface-tint` are not in Figma; they are derived (`pdr.derived` in tokens.json). `scrim` is in Figma (`#00000052`): the role is black, the 32 % opacity is applied by the backdrop.
 - Measured contrast failures (light mode): `on-secondary`/`secondary` 2.42, `on-warning`/`warning` 2.72, `warning` on surface 2.60 — see `foundations/accessibility.md` for the full table and mandatory workarounds.
 - Palette anomalies: `purple/99` = `indigo/99`; `red/99` and `cool grey/99` hold M3-baseline leftovers.

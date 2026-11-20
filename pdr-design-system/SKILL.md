@@ -14,7 +14,7 @@ Component docs mirror the Figma file: one file per Figma page, split into the tw
 
 | Task | Read |
 |---|---|
-| Any color / type / spacing / radius / shadow value | `tokens.json` (look up by `$extensions["pdr.figma"]` = Figma variable name) |
+| Any color / type / spacing / radius / shadow / state value | `references/tokens/<category>.md` (colors, typography, spacing, shape, elevation, state-layers, motion); machine-readable: `tokens.json` |
 | Theme setup, dark mode, `*-overrides()` rules, CSS custom properties | `references/theming-rules.md` |
 | Figma page under **↓ ANGULAR MD3 COMPONENTS** | `references/components/md3/<page>.md` |
 | Figma page under **↓ PDR COMPONENTS** | `references/components/pdr/<page>.md` |
@@ -26,7 +26,7 @@ Component docs mirror the Figma file: one file per Figma page, split into the tw
 
 **New screen?** Start from the closest example (`references/examples/`), then fill it with components.
 
-Every component file lists the Figma node IDs, variant props → Angular mapping, and its own overrides SCSS (`styles/components/{md3,pdr}/_<page>.scss`). Open only the files for the components on the frame you are building; follow cross-links (`../pdr/…`) only when needed.
+Every component file has two parts: **Part 1 — Figma Spec** (purpose, anatomy, decision rules, states, accessibility, AI checklist — the design source of truth) and **Part 2 — Angular implementation** (mapping, code, overrides SCSS in `styles/components/{md3,pdr}/_<page>.scss`). **Run the AI checklist of every component you use before finishing.** Rules marked “PDR proposal — confirm” or listed under “Open questions” are not final: follow them, but mention them to the user. If Part 2 contradicts Part 1, Part 1 wins.
 
 ## Guardrails (non-negotiable)
 
@@ -39,40 +39,46 @@ Every component file lists the Figma node IDs, variant props → Angular mapping
 7. **Dark mode via `color-scheme`** only (`html.pdr-dark`). Never write per-component dark overrides.
 8. **Wrappers are a last resort.** Create a `pdr-*` wrapper only when Material has no equivalent or PDR behavior is added (loading, status mapping). Wrappers compose Material; they never reimplement it.
 9. **States are never hand-coded.** Figma Hovered/Focused/Pressed/Dragged = Material state layers.
-10. **Unfinished pages:** 🔴 Accordion, Autocomplete; 🌕 Chips, Sheets, Status tags, Calendars, Chats, Files, Order preview, Payment, Popovers. Use Material defaults and flag deviations in the PR.
+10. **Unfinished pages (🌕):** Chats, AI & Notes · Files & Documents · Order preview · Payment & Invoices · Status tags · Calendars. Use the spec’s rules, keep custom styling minimal, and flag open questions in the PR.
 11. **Accessibility is a merge requirement:** WCAG 2.1 AA, keyboard-operable, labelled, ≥ 44 px targets — checklist in `references/foundations/accessibility.md`. Never put text on `secondary` or `warning` (light mode fails contrast); use their `-container` roles.
 12. **Locked components — App bar and Page header.** Never change their design. App bar: used as-is, logo always the bundled SVG `assets/brand/pdr-logo.svg` (never a placeholder). Page header: only the title and the right-side page actions change; breadcrumbs appear automatically from navigation level 3. Details: `references/components/pdr/appbar-page-header.md`.
 13. Ignore any Figma set prefixed `Deprecated/`, `Example/`, `.` or `_`.
 
 ## Figma → Angular mapping (index)
 
-### ↓ ANGULAR MD3 COMPONENTS → `references/components/md3/`
+### ↓ ANGULAR MD3 COMPONENTS → `references/components/md3/` (all 🟢)
 
 | Figma page | File | Primary Angular API · wrapper |
 |---|---|---|
-| Accordion, Expansion panel 🔴 | `accordion-expansion-panel.md` | `mat-accordion`, `mat-expansion-panel` |
-| Autocomplete 🔴 | `autocomplete.md` | `matAutocomplete`, `mat-autocomplete` |
+| Autocomplete | `autocomplete.md` | `matAutocomplete`, `mat-autocomplete` |
 | Badges | `badges.md` | `matBadge` |
-| Button toggle (Segmented buttons) | `button-toggle.md` | `mat-button-toggle-group` |
+| Bottom sheet | `bottom-sheet.md` | `MatBottomSheet` (mobile only) |
 | Buttons | `buttons.md` | `matButton`, `matIconButton`, `matFab` · `pdr-button` |
+| Button toggle (Segmented buttons) | `button-toggle.md` | `mat-button-toggle-group` |
 | Cards | `cards.md` | `mat-card appearance` |
 | Checkboxes | `checkboxes.md` | `mat-checkbox` |
-| Chips 🌕 | `chips.md` | `mat-chip-set/-listbox/-grid` · `pdr-dropdown-chip` |
-| Data Grids | `data-grids.md` | `mat-table`, `matSort` · `pdr-cell-*` |
-| Date & time pickers | `date-time-pickers.md` | `mat-datepicker`, `mat-date-range-picker`, `mat-timepicker` · `pdr-time-dial` |
+| Chips | `chips.md` | `mat-chip-set/-listbox/-grid` · `pdr-dropdown-chip` |
+| Datepickers | `date-pickers.md` | `mat-datepicker`, `mat-date-range-picker` |
 | Dialogs | `dialogs.md` | `MatDialog` · `pdr-dialog-toolbar` |
 | Divider | `divider.md` | `mat-divider` |
-| Menus & Select | `menus-select.md` | `mat-select`, `mat-menu` |
-| Navigation drawer & rail | `navigation-drawer-rail.md` | `mat-sidenav`, `mat-nav-list` |
+| Expansion panel | `expansion-panel.md` | `mat-accordion`, `mat-expansion-panel` |
+| Form fields | `form-fields.md` | `mat-form-field`, `matInput` · `pdr-code-input` |
+| Input (Text area) | `input.md` | `textarea matInput`, `cdkTextareaAutosize` |
+| List | `list.md` | `mat-list`, `mat-nav-list`, `mat-selection-list` |
+| Menu | `menu.md` | `mat-menu`, `mat-menu-item` |
 | Paginators | `paginators.md` | `mat-paginator` |
 | Progress indicators | `progress-indicators.md` | `mat-progress-bar`, `mat-progress-spinner` |
 | Radio buttons | `radio-buttons.md` | `mat-radio-group` |
-| Sheets 🌕 | `sheets.md` | `mat-sidenav`, `MatBottomSheet` · `pdr-side-sheet` |
+| Sheets | `sheets.md` | `mat-sidenav position="end"` · `pdr-side-sheet` |
+| Select | `select.md` | `mat-select` |
+| Slide Toggle | `slide-toggle.md` | `mat-slide-toggle` |
 | Sliders | `sliders.md` | `mat-slider` |
 | Snackbar | `snackbar.md` | `MatSnackBar` |
-| Switch | `switch.md` | `mat-slide-toggle` |
-| Tabs, Steppers | `tabs-steppers.md` | `mat-tab-group`, `mat-tab-nav-bar`, `mat-stepper` |
-| Text fields | `text-fields.md` | `mat-form-field`, `matInput` · `pdr-search-bar`, `pdr-code-input` |
+| Sort Header | `sort-header.md` | `matSort`, `mat-sort-header` |
+| Stepper | `stepper.md` | `mat-stepper` (Wizard) · `pdr-wizard-steps` |
+| Table (Data Grids) | `data-grids.md` | `mat-table` · `pdr-cell-*` |
+| Tabs | `tabs.md` | `mat-tab-group`, `mat-tab-nav-bar` |
+| Timepicker | `timepicker.md` | `mat-timepicker` · `pdr-time-dial` |
 | Toolbar | `toolbar.md` | `mat-toolbar.pdr-toolbar` |
 | Tooltips | `tooltips.md` | `matTooltip` · `pdr-rich-tooltip` |
 | Tree | `tree.md` | `mat-tree` |
@@ -85,7 +91,6 @@ Every component file lists the Figma node IDs, variant props → Angular mapping
 | Appbar & Page header 🔒 | `appbar-page-header.md` | `pdr-app-bar`, `pdr-page-header` (locked), `pdr-top-app-bar` |
 | Avatars | `avatars.md` | `pdr-avatar`, `pdr-avatar-group`, `pdr-selected-user` |
 | Brand loader | `brand-loader.md` | `pdr-brand-loader` |
-| Calendars 🌕 | `calendars.md` | `pdr-calendar-header`, `pdr-gantt-bar` |
 | Chats, AI & Notes 🌕 | `chats-ai-notes.md` | `pdr-chat-message`, `pdr-message-input`, `pdr-note` |
 | Files & Documents 🌕 | `files-documents.md` | `pdr-document-card`, `pdr-file-icon` |
 | Megaoptions, ToDo | `megaoptions-todo.md` | `pdr-megaoption`, `pdr-todo-button` |
@@ -93,8 +98,9 @@ Every component file lists the Figma node IDs, variant props → Angular mapping
 | Order preview 🌕 | `order-preview.md` | `pdr-order-card`, `pdr-order-popover`, `pdr-workshop-status` |
 | Panels & Widgets | `panels-widgets.md` | `pdr-panel`, `pdr-widget` |
 | Payment & Invoices 🌕 | `payment-invoices.md` | `pdr-invoice-accordion`, `pdr-status-arrow` |
+| Search | `search.md` | `pdr-search-bar` (M3 Search) |
 | Pickers | `pickers.md` | `pdr-color-picker`, `pdr-touchspin` |
-| Popovers & Tipseens 🌕 | `popovers-tipseens.md` | `pdr-tipseen`, `pdr-module-popover` |
+| Popovers & Tipseens | `popovers-tipseens.md` | `pdr-tipseen`, `pdr-module-popover` |
 | Sign up & Login | `sign-up-login.md` | `pdr-auth-panel` |
 | Skeleton loaders, empty and error states | `skeleton-empty-error-states.md` | `pdr-skeleton*`, `pdr-empty-state`, `pdr-error-state` |
 | Status tags 🌕 | `status-tags.md` | `pdr-status-tag` + domain tags |
@@ -122,6 +128,19 @@ Every component file lists the Figma node IDs, variant props → Angular mapping
 | Full-screen modal shell | `fullscreen-modal-shell.md` |
 | Form modal / Summary modal | `form-modal.md`, `summary-modal.md` |
 | Form sheet / Summary sheet | `form-sheet.md`, `summary-sheet.md` |
+| Calendars 🌕 (planning) | `calendars.md` |
+
+### Tokens → `references/tokens/`
+
+| Category | File |
+|---|---|
+| Colors (roles, surfaces, semantic, additional, palette) | `colors.md` |
+| Typography | `typography.md` |
+| Spacing (+ size pointers) | `spacing.md` |
+| Shape / corner radius | `shape.md` |
+| Elevation | `elevation.md` |
+| State layers | `state-layers.md` |
+| Motion | `motion.md` |
 
 ## Figma → token quick lookup
 

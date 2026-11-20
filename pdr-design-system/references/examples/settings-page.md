@@ -39,5 +39,5 @@ The menu becomes **tabs** under the page header (`nav mat-tab-nav-bar`, 48 px + 
 .pdr-settings__content { flex: 1 1 auto; max-width: 839px; display: flex; flex-direction: column; gap: var(--pdr-space-16); }
 ```
 ## Rules
-- Each settings group = one `pdr-panel` with `pdr-panel-title`. Toggles use the Form switcher (`../components/md3/switch.md`), selects `../components/md3/menus-select.md`.
+- Each settings group = one `pdr-panel` with `pdr-panel-title`. Toggles use the Form switcher (`../components/md3/slide-toggle.md`), selects `../components/md3/select.md`.
 - Save per panel **or** one sticky action bar — never both on the same page.

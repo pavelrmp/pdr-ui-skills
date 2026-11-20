@@ -1,21 +1,91 @@
 # Appbar & Page header
 
-Figma page: **Appbar & Page header** `3330:116` · status 🟢 · [open](https://www.figma.com/design/3N1iHNzVKurYAwq0LWsVpQ/PDR.cloud-Design-System?node-id=3330-116)
-Layer: **PDR** — no Material equivalent; compose Material primitives + tokens. Selectors are the agreed convention; check `libs/ui` before creating new ones.
+Figma page: **Appbar & Page header 🟢** `3330:116` · [open page](https://www.figma.com/design/3N1iHNzVKurYAwq0LWsVpQ/PDR.cloud-Design-System?node-id=3330-116) · Figma Spec: [`11032:4514`](https://www.figma.com/design/3N1iHNzVKurYAwq0LWsVpQ/PDR.cloud-Design-System?node-id=11032-4514)
+Layer: **PDR** — no Material equivalent; compose Material primitives + tokens. Tokens: `../../tokens/`.
 
-## Components
-- **App bar** `9329:6038` — `Version` v 2026 · `Size` Desktop|Tablet|Mobile (+ legacy **App bar mobile** `4104:21868`, **App bar tablet** `4104:21825`)
-- **Top app bar** `5126:14156` — `Configuration` Small centered|Small|Medium|Large · `Elevation` flat|on-scroll
-- **Page header** `10125:1535` — `Size` Desktop and Tablet|Mobile
-- **Breadcrumbs** `3513:3670`, **Section title** `3317:94`, **Header actions** `8851:20492`, **Footer** `3642:7851`
-- **Settings menu basic** `3558:2890`, **Second-level menu** `4798:1021`
-- **Order title** `10917:39575`, **Suborders** `10917:39618`
+> **How to read this file.** Part 1 is the **Figma Spec** — the design rules (source of truth, copied from Figma). Part 2 is the **Angular implementation** for this codebase. If Part 2 contradicts Part 1, follow Part 1 and flag the difference.
 
-## 🔒 Locked components
+# Part 1 — Figma Spec
+
+**Status:** 🟢 Ready · **Figma components:** `App bar`, `Page header`, `Breadcrumbs`, `Section title`, `Example/Page header`, order header parts (`Order title`, `Suborders`, `Order title and suborders`, `Task buttons`), menus (`Settings menu basic`, `Second-level menu`, `Header actions`) · **Angular:** `pdr-app-bar`, `pdr-page-header` (title input, actions slot); others custom (selectors to confirm) · **Sources:** component descriptions on this page (App bar, Page header and Breadcrumbs are 🔒 LOCKED); [M3 App bars](https://m3.material.io/components/app-bars/guidelines) for context
+
+> **No M3 component.** App bar and Page header are PDR components and **locked**: rules from their descriptions are mandatory. Other rules marked **(PDR proposal — confirm)**.
+
+Rule strength: **MUST** = mandatory · **SHOULD** = recommended · **MAY** = optional.
+
+## Purpose
+
+| Component | Purpose |
+|---|---|
+| App bar | Global application header on every page: logo, user, main navigation, notifications |
+| Page header | Context of the current page: page title, breadcrumbs (deep pages) and page-level actions |
+| Breadcrumbs | Path to the current page — only inside the Page header |
+| Section title | Title of a section or panel inside the page, with optional icons and a count |
+| Example/Page header | Reference configurations for typical page types |
+
+## Figma components and properties
+
+| Component | Properties |
+|---|---|
+| App bar | Size: Desktop, Tablet, Mobile · Version: v 2026 · Show beta |
+| Page header | Size: Desktop and Tablet, Mobile · Text (page title) · Show breadcrumbs |
+| Breadcrumbs | — (fixed design) |
+| Section title | Show leading icon + Left Icon · Show trailing icon + Right Icon · Show number |
+| Example/Page header | Page type: Processes, Planning co-pilot, Order |
+
+## Decision rules
+
+**App bar (🔒 locked)**
+
+1. **MUST** use the App bar exactly as provided on every page. **MUST NOT** change layout, colours, sizes, spacing, icons or order, or add/remove elements.
+2. Choose `Size` by screen size (Desktop / Tablet / Mobile). The only other option is `Show beta`.
+3. The elevation (level 1) and the shadow are part of the design — **MUST NOT** be removed or changed.
+4. The logo is always the SVG layer inside the component — never PNG/JPG, never redrawn.
+
+**Page header (🔒 locked)**
+
+1. **Only two things change per page:** the page title text and the page-level actions on the right.
+2. Title typography: Desktop and Tablet = display small (36/44); Mobile = headline medium (28/36).
+3. **Breadcrumbs:** hidden by default; **MUST** be shown only on pages at the 3rd navigation level or deeper (e.g. Aufträge › Auftrag A-0001 › Kalkulation). Levels 1 and 2 never show breadcrumbs.
+4. **Page-level actions:**
+   - **Desktop:** secondary actions sit on the right side of the primary action, same button size.
+   - **Tablet:** secondary actions hidden in a ⋮ icon button next to the primary action.
+   - **Mobile:** the primary action becomes a FAB; secondary actions go into the ⋮ menu.
+5. Start from `Example/Page header` when the page type matches (Processes, Planning co-pilot, Order).
+
+**Section title**
+
+1. (PDR proposal — confirm) Use `Section title` for sections and panels inside a page — never as a page title. `Show number` shows the count of items in the section.
+
+## Behavior and interaction
+
+- Breadcrumbs are derived from the router in Angular and appear automatically from level 3.
+- App bar navigation and notifications behave the same on every page.
+
+## AI checklist
+
+- [ ] App bar unchanged, Size by screen
+- [ ] Page header: only title and actions changed
+- [ ] Breadcrumbs only from level 3
+- [ ] Actions: right of primary (desktop) · ⋮ (tablet) · FAB + ⋮ (mobile)
+- [ ] Section title only inside the page
+
+## Open questions for the team
+
+- **Deprecated layers:** `App bar`, `Page header`, `Example/Page header`, `Header actions`, `Order title`, `Suborders`, `Order title and suborders` and `Task buttons` still contain `Deprecated/Button`. App bar and Page header are 🔒 locked — swapping the button needs an explicit decision.
+- **Unused components:** `Header actions`, `Settings menu basic` and `Second-level menu` have no uses in this file. Are they still needed?
+- **Order header parts:** `Order title`, `Suborders`, `Order title and suborders` and `Task buttons` were recovered from an old library. `Order title` and `Suborders` still use a default “Property 1” property. Should they be completed or merged into the Order page header example?
+
+---
+
+# Part 2 — Angular implementation
+
+### 🔒 Locked components
+
 
 **App bar** and **Page header** are locked: their design cannot be changed. This is stated in the Figma component descriptions too. Claude must never restyle, rearrange, extend or "improve" them — no new elements, colors, sizes, spacing or order, no per-page variants.
 
-### App bar `9329:6038`
+#### App bar `9329:6038`
 - Use the one shared `<pdr-app-bar />` on every page, exactly as designed. It has **no styling inputs**.
 - Allowed configuration only: `Size` (Desktop / Tablet / Mobile — chosen automatically by breakpoint) and `Show beta` (`[beta]="true"`).
 - **Elevation is part of the design**: the app bar always has elevation **level 1** (Figma effect style `M3/Elevation Light/1`, `Dark/1` in dark mode). The shadow cannot be removed, reduced or changed — not on scroll, not per page.
@@ -30,7 +100,7 @@ Layer: **PDR** — no Material equivalent; compose Material primitives + tokens.
   - Its colors (`#1D75E8` background, white mark) are part of the brand asset and are the only allowed hard-coded colors.
   - If the logo changes in Figma, re-export the Logo layer (select it → Export → SVG) and replace the file in the skill.
 
-### Page header `10125:1535`
+#### Page header `10125:1535`
 Only **two things change per page**:
 1. the **page title** (`title` input, rendered as the page's only `<h1>`)
 2. the **page-level actions** on the right side (projected into `pdrPageHeaderActions`)
@@ -86,7 +156,8 @@ trail = toSignal(this.router.events.pipe(
 showBreadcrumbs = computed(() => this.trail().length >= 3);
 ```
 
-## Mapping
+### Mapping
+
 | Figma | Wrapper | Built from |
 |---|---|---|
 | App bar (v 2026) 🔒 | `<pdr-app-bar [beta]>` (no other inputs) | `mat-toolbar`, `matIconButton` (menu, notifications with `matBadge`), `pdr-avatar` + `mat-menu` (account) |
@@ -97,9 +168,10 @@ showBreadcrumbs = computed(() => this.trail().length >= 3);
 | Breadcrumbs | rendered **only by `pdr-page-header`**, from level 3; never placed on a page directly | `<nav aria-label="Brotkrümel"><ol>` + `routerLink`, last item `aria-current="page"` |
 | Section title | `<pdr-section-title>` | title-medium + optional action `matButton` |
 | Header actions | `pdrPageHeaderActions` content | `matButton`, `matIconButton`, `mat-menu` |
-| Settings menu / Second-level menu | `mat-menu` | see `../md3/menus-select.md` |
+| Settings menu / Second-level menu | `mat-menu` | see `../md3/menu.md` |
 | Order title / Suborders | `<pdr-order-title>` | `mat-chip-listbox` for suborders |
 | Footer | `<pdr-footer>` | body-small, on-surface-variant |
 
-## Tokens
+### Tokens
+
 Background `--mat-sys-surface`, title `--mat-sys-on-surface`, icons `--mat-sys-on-surface-variant`, spacing `--pdr-space-16/24`.

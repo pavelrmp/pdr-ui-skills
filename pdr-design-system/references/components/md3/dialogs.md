@@ -1,74 +1,126 @@
 # Dialogs
 
-Figma page: **Dialogs** `3330:117` · status 🟢 · [open](https://www.figma.com/design/3N1iHNzVKurYAwq0LWsVpQ/PDR.cloud-Design-System?node-id=3330-117)
-Layer: **MD3** — must be implemented with Angular Material. Rules and tokens: `../../theming-rules.md`.
+Figma page: **Dialogs 🟢** `3330:117` · [open page](https://www.figma.com/design/3N1iHNzVKurYAwq0LWsVpQ/PDR.cloud-Design-System?node-id=3330-117) · Figma Spec: [`10997:2654`](https://www.figma.com/design/3N1iHNzVKurYAwq0LWsVpQ/PDR.cloud-Design-System?node-id=10997-2654)
+Layer: **MD3** — implement with Angular Material. Tokens: `../../tokens/`, theming: `../../theming-rules.md`.
 
-Widths come from Figma collection **Modals**. Always open via `MatDialog`; always set `panelClass`.
+> **How to read this file.** Part 1 is the **Figma Spec** — the design rules (source of truth, copied from Figma). Part 2 is the **Angular implementation** for this codebase. If Part 2 contradicts Part 1, follow Part 1 and flag the difference.
 
-## Components
+# Part 1 — Figma Spec
 
-Use: `Basic dialog` `10905:17519`, `Dialog with scrollable content` `10905:17533`, `Dialog title and description` `10905:17500`, `Dialog actions` `10905:17546`, `Full-screen dialog header` `7181:10816`, `Dialog toolbar` `10917:39470`. Ignore all `Deprecated/*`.
+**Status:** 🟢 Ready · **Figma components:** `Basic dialog`, `Dialog with scrollable content`, `Dialog title`, `Dialog title and description`, `Dialog content`, `Dialog actions`, `Full-screen dialog header`, `Dialog toolbar` · **Angular:** `MatDialog` (`mat-dialog-title`, `mat-dialog-content`, `mat-dialog-actions`) · **Sources:** [M3 Dialogs guidelines](https://m3.material.io/components/dialogs/guidelines), [Dialogs specs](https://m3.material.io/components/dialogs/specs), [Snackbar — similar components](https://m3.material.io/components/snackbar/guidelines)
 
-Figma surface: `<Paper>` = surface-container-lowest, `corner-extra-large` (28) desktop / `corner-large` (16) mobile, level5.
+Rule strength: **MUST** = mandatory · **SHOULD** = recommended · **MAY** = optional.
 
-### Widths (Figma `Modals`)
+## Purpose
 
-| Token | px | Typical use |
+A dialog is a modal window in front of app content that provides critical information or asks for a decision. Dialogs disable all app functionality while they’re open and stay on screen until confirmed, dismissed, or a required action is taken.
+
+**Use when** the person must make a decision or acknowledge urgent information before continuing.
+
+**Don’t use when**
+
+- The message is about a process and needs no decision → snackbar.
+- Options can be offered without interrupting → a dropdown menu is less disruptive.
+- Dialogs are purposefully interruptive — **use them sparingly**.
+
+## Variants
+
+| M3 variant | Figma | Use |
 |---|---|---|
-| `--pdr-dialog-width-s` | 280 | confirm, mobile basic |
-| `--pdr-dialog-width-m` | 420 | basic dialog (default) |
-| `--pdr-dialog-width-l` | 560 | short form |
-| `--pdr-dialog-width-xl` | 900 | scrollable content, tables |
-| `--pdr-dialog-width-xxl` | 1200 | editors |
-| `--pdr-dialog-width-xxxl` | 1536 | full workspace |
+| Basic dialog | `Basic dialog` (Screen size Tablet and Desktop / Mobile), `Dialog with scrollable content` | Urgent information, details or actions; lets people confirm, dismiss or acknowledge |
+| Full-screen dialog | `Full-screen dialog header` + content | A series of tasks to complete (e.g. creating an entry with several fields) on compact screens |
 
-### Opening
+On expanded screens (840 px and wider), use a basic dialog instead of a full-screen dialog.
 
-```ts
-private dialog = inject(MatDialog);
+## Anatomy (basic dialog)
 
-openConfirm() {
-  return this.dialog.open(ConfirmDialog, {
-    width: 'var(--pdr-dialog-width-m)',
-    maxWidth: 'calc(100vw - 32px)',
-    panelClass: 'pdr-dialog',
-    autoFocus: 'first-tabbable',
-    data: { title: 'Auftrag löschen?' },
-  });
-}
+| # | Element | Required | Figma |
+|---|---|---|---|
+| 1 | Container | Yes | `Basic dialog` |
+| 2 | Icon | No | `Dialog title and description` (Icon) |
+| 3 | Headline | No | `Dialog title` · Title |
+| 4 | Supporting text | Yes | Supporting text / `Dialog content` |
+| 5 | Divider | No | Between scrolling content and actions |
+| 6 | Actions | Yes | `Dialog actions` |
 
-openFullscreen() {   // Figma Full-screen dialog header / mobile
-  return this.dialog.open(EditOrderDialog, {
-    width: '100vw', height: '100dvh', maxWidth: '100vw',
-    panelClass: ['pdr-dialog', 'pdr-dialog--fullscreen'],
-  });
-}
-```
-On viewports below the `M` breakpoint (768px), add `pdr-dialog--mobile` via `BreakpointObserver`.
+Full-screen dialog: container, header with close icon, headline, text button (e.g. Save), optional divider.
 
-### Template mapping
+## Figma properties
 
-| Figma part | Angular |
+| Component | Properties |
 |---|---|
-| Dialog title (`Vertical` True→ icon above title) | `<h2 mat-dialog-title>`; icon variant → `<mat-icon class="pdr-dialog__icon">` before it + `class="pdr-dialog__title--center"` on the title |
-| Dialog title and description | `<h2 mat-dialog-title>` + first `<p>` in content (body-medium, on-surface-variant) |
-| Dialog content / scrollable content | `<mat-dialog-content>` (scrolls natively; dividers appear on scroll) |
-| Dialog actions: 1 / 2 / 3 buttons | `<mat-dialog-actions align="end">` with text / filled `matButton`; primary action last |
-| Dialog actions: delete + 3 buttons | destructive `matButton class="pdr-btn--error"` first + `<span class="pdr-spacer">` then the rest |
-| Dialog actions: with a comment | `mat-form-field` in content above actions |
-| Dialog toolbar | `<pdr-dialog-toolbar [title]>` (`matIconButton` close + actions) |
-| Full-screen dialog header | `<pdr-dialog-toolbar variant="fullscreen">` (close left, save `matButton` right) |
+| Dialog title / Dialog title and description | Title, Supporting text, Show supporting text, Show info + Info text, Show trailing icon, Vertical or Icon |
+| Dialog actions | Actions: 1 button, 2 buttons, 3 buttons, With a comment, delete + 3 buttons |
+| Full-screen dialog header | Screen size Mobile / Desktop, Show button, Show button 2 |
+| Dialog with scrollable content | Device Desktop and Tablet / Mobile, content slot |
 
-```html
-<h2 mat-dialog-title>Auftrag löschen?</h2>
-<mat-dialog-content>Dieser Schritt kann nicht rückgängig gemacht werden.</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button matButton mat-dialog-close>Abbrechen</button>
-  <button matButton="filled" class="pdr-btn--error" [mat-dialog-close]="true" cdkFocusInitial>Löschen</button>
-</mat-dialog-actions>
-```
+## Decision rules
 
-## Overrides (`styles/components/md3/_dialogs.scss`)
+1. Decision or urgent information → basic dialog; a multi-field task on mobile → full-screen dialog.
+2. **MUST** provide a way to confirm and/or dismiss; dialogs stay until one of these happens.
+3. Full-screen dialog: the confirming action is **Save**. **MUST NOT** use the confirming action to dismiss.
+4. When someone dismisses a full-screen dialog with unsaved changes, **MUST** show a basic dialog to confirm discarding them.
+5. Only full-screen dialogs can have other dialogs on top of them. A basic dialog **MUST NOT** be covered by anything else.
+6. Long content → `Dialog with scrollable content`, with a divider between content and actions.
+
+## Behavior and interaction
+
+- Dialogs appear and disappear with an enter/exit transition.
+- While open, the rest of the app is blocked (modal) behind a scrim.
+
+## Content guidelines
+
+- (PDR) Headline: a clear question or statement. Supporting text: what happens and why.
+- Action labels name the result (e.g. “Löschen”, “Abbrechen”), not “Yes/No”. *(PDR wording)*
+
+## Usage guidelines
+
+| Do | Don’t |
+|---|---|
+| Use dialogs for decisions that block the flow | Use a dialog for non-blocking status — use a snackbar |
+| Confirm discarding unsaved changes in full-screen dialogs | Dismiss a full-screen dialog with its Save action |
+| Use a basic dialog on large screens | Use full-screen dialogs on expanded screens |
+
+## Combining with other components
+
+- **Buttons:** the dialog actions use the button rules (Buttons spec); the most important action gets the higher emphasis.
+- **Date and time pickers:** these open as dialogs and are confirmed with OK.
+
+## Measurements (basic dialog)
+
+| Attribute | Value |
+|---|---|
+| Corner radius | 28 px |
+| Width | Min 280 px, max 560 px |
+| Padding (all sides) | 24 px |
+| Space between buttons | 8 px |
+| Title to body | 16 px |
+| Icon to title | 16 px |
+| Body to actions | 24 px |
+| Icon size | 24 px |
+| Alignment | Centered with an icon, start-aligned without |
+| Divider height | 1 px |
+
+## AI checklist
+
+- [ ] A dialog is really needed (blocking decision), otherwise snackbar or menu
+- [ ] Basic on desktop and tablet; full-screen only for multi-step tasks on compact screens
+- [ ] Clear confirm/dismiss actions
+- [ ] Unsaved full-screen changes are confirmed before discarding
+- [ ] Width 280–560 px, 24 px padding, 28 px radius
+
+## Not covered by M3 (PDR conventions)
+
+- **`Dialog actions` variants:** “With a comment” and “delete + 3 buttons” are PDR patterns.
+- **`Dialog toolbar`:** a recovered PDR component.
+- **Keyboard behavior** (e.g. Esc to close) and focus handling: not listed in the sources used here. Follow Angular `MatDialog` defaults.
+
+---
+
+# Part 2 — Angular implementation
+
+### Overrides (`styles/components/md3/_dialogs.scss`)
+
 
 ```scss
 @use '@angular/material' as mat;

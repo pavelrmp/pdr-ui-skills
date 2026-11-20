@@ -7,8 +7,9 @@ Claude skill + design tokens that map the [PDR.cloud Figma Design System](https:
 | `SKILL.md` | Router, guardrails, Figma → Angular index |
 | `tokens.json` | DTCG / Style Dictionary v4 tokens (light + dark, M3 roles, PDR roles, typescale, shape, elevation, spacing) |
 | `references/theming-rules.md` | `mat.theme()` setup, `--mat-sys-*` / `--pdr-*` properties, override rules |
-| `references/components/md3/` | One file per Figma page under "↓ ANGULAR MD3 COMPONENTS" |
+| `references/components/md3/` | One file per Figma page under "↓ ANGULAR MD3 COMPONENTS" — Part 1 Figma Spec, Part 2 Angular implementation |
 | `references/components/pdr/` | One file per Figma page under "↓ PDR COMPONENTS" |
+| `references/tokens/` | One file per token category: colors, typography, spacing, shape, elevation, state layers, motion |
 | `references/foundations/` | Accessibility, grids & breakpoints, icons |
 | `references/examples/` | Page examples from the Figma "Examples" page |
 | `assets/brand/pdr-logo.svg` | PDR logo (App bar, 44 × 44) exported from Figma |

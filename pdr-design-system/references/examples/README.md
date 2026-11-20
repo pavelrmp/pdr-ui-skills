@@ -15,6 +15,7 @@ Examples are full-page compositions. Start every new screen from the closest exa
 | Summary modal | `summary-modal.md` | `10905:14849` | Read-only preview in a dialog |
 | Form sheet | `form-sheet.md` | `10911:18069` | Edit next to the list (side sheet) |
 | Summary sheet | `summary-sheet.md` | `10908:11536` | Preview next to the list (side sheet) |
+| Calendars 🌕 | `calendars.md` | `11008:46064` (spec) | Workshop planning views: appointments, Gantt bars, vehicles in workshop |
 
 Sample contents used inside the shells: Incoming order (`5743:19955`, mobile `10908:11375`), Payment details (`10905:19292`), Edit Client (`10911:16274`), Task preview (`10905:14941`, mobile `9073:6450`).
 
